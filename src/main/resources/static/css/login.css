@@ -1,0 +1,694 @@
+/* ================================
+   BASE RESET
+================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ================================
+   BODY
+================================ */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    overflow: hidden;
+
+    perspective: 1000px;
+}
+
+
+/* ================================
+   ANIMATED BACKGROUND
+================================ */
+
+.background-slider {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: -3;
+
+    overflow: hidden;
+}
+
+
+/* Each background image */
+
+.bg-slide {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    background-size: cover;
+    background-position: center;
+
+    opacity: 0;
+
+    animation: citySlide 25s infinite;
+}
+
+
+/* Smart City Images */
+
+.bg-slide:nth-child(1) {
+    background-image: url("../images/city1.jpg");
+    animation-delay: 0s;
+}
+
+.bg-slide:nth-child(2) {
+    background-image: url("../images/city2.jpg");
+    animation-delay: 5s;
+}
+
+.bg-slide:nth-child(3) {
+    background-image: url("../images/city3.jpg");
+    animation-delay: 10s;
+}
+
+.bg-slide:nth-child(4) {
+    background-image: url("../images/city4.jpg");
+    animation-delay: 15s;
+}
+
+.bg-slide:nth-child(5) {
+    background-image: url("../images/city5.jpg");
+    animation-delay: 20s;
+}
+
+
+/* Sliding + Fade Animation */
+
+@keyframes citySlide {
+
+    0% {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    20% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    25% {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+/* ================================
+   DARK BACKGROUND OVERLAY
+================================ */
+
+.background-overlay {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 20, 50, 0.55);
+
+    z-index: -2;
+}
+
+
+/* ================================
+   MAIN CONTAINER
+================================ */
+
+.container {
+
+    display: flex;
+
+    width: 900px;
+    max-width: 100%;
+
+    min-height: 550px;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(37, 99, 235, 0.2);
+
+    transform-style: preserve-3d;
+
+    transform:
+        rotateX(2deg)
+        rotateY(-2deg);
+
+    transition:
+        transform 0.5s ease,
+        box-shadow 0.5s ease;
+}
+
+
+/* Hover 3D Effect */
+
+.container:hover {
+
+    transform:
+        rotateX(0deg)
+        rotateY(0deg)
+        translateY(-5px);
+
+    box-shadow:
+        0 30px 60px -12px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(37, 99, 235, 0.3);
+}
+
+
+/* ================================
+   LEFT PANEL
+================================ */
+
+.left-panel {
+
+    flex: 1;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e3a8a,
+            #1d4ed8
+        );
+
+    padding: 40px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    color: #ffffff;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Left panel subtle animation */
+
+.left-panel::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    top: -80px;
+    right: -80px;
+
+    animation: floatingCircle 5s ease-in-out infinite;
+}
+
+
+@keyframes floatingCircle {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(20px);
+    }
+}
+
+
+.left-panel .overlay {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Logo */
+
+.left-panel img {
+
+    height: 60px;
+
+    width: auto;
+
+    margin-bottom: 15px;
+
+    filter: none !important;
+
+    animation: logoAnimation 1s ease;
+}
+
+
+@keyframes logoAnimation {
+
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Heading */
+
+.left-panel h1 {
+
+    color: #ffffff;
+
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 5px;
+}
+
+
+.left-panel h3 {
+
+    color: #93c5fd;
+
+    font-size: 1.1rem;
+
+    font-weight: 600;
+
+    margin-bottom: 15px;
+}
+
+
+.left-panel p {
+
+    color: #e2e8f0;
+
+    font-size: 0.95rem;
+
+    line-height: 1.5;
+
+    margin-bottom: 25px;
+}
+
+
+/* Features */
+
+.left-panel ul {
+
+    list-style: none;
+}
+
+
+.left-panel ul li {
+
+    color: #cbd5e1;
+
+    font-size: 0.9rem;
+
+    margin-bottom: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.left-panel ul li i {
+
+    color: #38bdf8;
+
+    font-size: 1rem;
+}
+
+
+/* ================================
+   RIGHT PANEL
+================================ */
+
+.right-panel {
+
+    flex: 1;
+
+    padding: 40px;
+
+    background: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* Login Box */
+
+.login-box {
+
+    width: 100%;
+
+    max-width: 320px;
+}
+
+
+/* Heading */
+
+.login-box h2 {
+
+    color: #1e3a8a;
+
+    font-size: 1.8rem;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+
+.login-box > p {
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+
+    margin-bottom: 25px;
+}
+
+
+/* ================================
+   INPUT BOX
+================================ */
+
+.input-box {
+
+    position: relative;
+
+    margin-bottom: 20px;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.input-box i.fa-user,
+.input-box i.fa-lock {
+
+    position: absolute;
+
+    left: 14px;
+
+    color: #94a3b8;
+
+    font-size: 1rem;
+}
+
+
+.input-box input {
+
+    width: 100%;
+
+    padding: 12px 40px 12px 40px;
+
+    border: 2px solid #e2e8f0;
+
+    border-radius: 8px;
+
+    font-size: 0.95rem;
+
+    color: #1e293b;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+
+.input-box input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* ================================
+   PASSWORD TOGGLE
+================================ */
+
+#togglePassword {
+
+    position: absolute;
+
+    right: 14px;
+
+    color: #94a3b8;
+
+    cursor: pointer;
+
+    font-size: 0.95rem;
+}
+
+
+#togglePassword:hover {
+
+    color: #2563eb;
+}
+
+
+/* ================================
+   OPTIONS
+================================ */
+
+.options {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 0.85rem;
+
+    margin-bottom: 25px;
+}
+
+
+.options label {
+
+    color: #475569;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    cursor: pointer;
+}
+
+
+.options a {
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+
+.options a:hover {
+
+    text-decoration: underline;
+}
+
+
+/* ================================
+   LOGIN BUTTON
+================================ */
+
+.login-btn {
+
+    width: 100%;
+
+    padding: 12px;
+
+    background-color: #2563eb;
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.3);
+
+    transition:
+        background-color 0.3s,
+        transform 0.2s;
+}
+
+
+.login-btn:hover {
+
+    background-color: #1d4ed8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+
+/* ================================
+   REGISTER
+================================ */
+
+.register {
+
+    text-align: center;
+
+    margin-top: 25px;
+
+    font-size: 0.88rem;
+
+    color: #64748b;
+}
+
+
+.register a {
+
+    color: #0284c7;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.register a:hover {
+
+    text-decoration: underline;
+}
+
+
+/* ================================
+   MOBILE RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+    body {
+
+        overflow-y: auto;
+
+        padding: 15px;
+    }
+
+
+    .container {
+
+        flex-direction: column;
+
+        width: 100%;
+
+        min-height: auto;
+
+        transform: none !important;
+
+        margin: 20px 0;
+    }
+
+
+    .left-panel {
+
+        padding: 30px 20px;
+
+        text-align: center;
+    }
+
+
+    .left-panel img {
+
+        height: 50px;
+    }
+
+
+    .left-panel h1 {
+
+        font-size: 1.6rem;
+    }
+
+
+    .left-panel ul {
+
+        display: inline-block;
+
+        text-align: left;
+    }
+
+
+    .right-panel {
+
+        padding: 30px 20px;
+    }
+
+
+    .login-box {
+
+        max-width: 350px;
+    }
+}

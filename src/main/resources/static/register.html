@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart City - Register</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        /* ==================================================
+           REGISTER PAGE
+        ================================================== */
+
+        .register-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .register-box h2 {
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .register-box > p {
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        .register-box .input-box {
+            margin-bottom: 15px;
+        }
+
+        .register-box .input-box input {
+            width: 100%;
+        }
+
+        .register-submit {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            background: #1677ff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .register-submit:hover {
+            opacity: 0.9;
+        }
+
+        .register-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .back-login {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .back-login a {
+            color: #1677ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-login a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     BACKGROUND
+====================================================== -->
+
+<div class="background-slider">
+
+    <div class="bg-slide"></div>
+    <div class="bg-slide"></div>
+    <div class="bg-slide"></div>
+    <div class="bg-slide"></div>
+    <div class="bg-slide"></div>
+
+</div>
+
+<div class="background-overlay"></div>
+
+
+<!-- =====================================================
+     MAIN CONTAINER
+====================================================== -->
+
+<div class="container">
+
+
+    <!-- =================================================
+         LEFT PANEL
+    ================================================== -->
+
+    <div class="left-panel">
+
+        <div class="overlay">
+
+            <img
+                src="images/logo.png"
+                alt="Smart City Logo"
+            >
+
+            <h1>SMART CITY</h1>
+
+            <h3>Citizen Service Portal</h3>
+
+            <p>
+                Building Smarter Cities,<br>
+                Empowering Better Lives.
+            </p>
+
+            <ul>
+
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Easy Online Services
+                </li>
+
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Complaint Tracking
+                </li>
+
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    24 × 7 Citizen Support
+                </li>
+
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    Secure Digital Platform
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         RIGHT PANEL
+    ================================================== -->
+
+    <div class="right-panel">
+
+        <div class="register-box">
+
+            <h2>Create Account</h2>
+
+            <p>
+                Register to use Smart City services
+            </p>
+
+
+            <!-- =================================================
+                 REGISTER FORM
+            ================================================== -->
+
+            <form id="registerForm">
+
+
+                <!-- FULL NAME -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Full Name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- USERNAME -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-user-tag"></i>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Username"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Email Address"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MOBILE -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-phone"></i>
+
+                    <input
+                        type="tel"
+                        id="mobile"
+                        placeholder="Mobile Number"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-location-dot"></i>
+
+                    <input
+                        type="text"
+                        id="address"
+                        placeholder="Address"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="input-box">
+
+                    <i class="fa fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm Password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- REGISTER BUTTON -->
+
+                <button
+                    type="submit"
+                    class="register-submit"
+                    id="registerButton">
+
+                    Create Account
+
+                </button>
+
+            </form>
+
+
+            <!-- LOGIN LINK -->
+
+            <div class="back-login">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REGISTER JAVASCRIPT
+====================================================== -->
+
+<script>
+
+
+// ======================================================
+// REGISTER FORM
+// ======================================================
+
+const registerForm =
+    document.getElementById("registerForm");
+
+const registerButton =
+    document.getElementById("registerButton");
+
+
+registerForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        // ==================================================
+        // GET FORM VALUES
+        // ==================================================
+
+        const fullName =
+            document
+                .getElementById("fullName")
+                .value
+                .trim();
+
+
+        const username =
+            document
+                .getElementById("username")
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+
+        const mobile =
+            document
+                .getElementById("mobile")
+                .value
+                .trim();
+
+
+        const address =
+            document
+                .getElementById("address")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        const confirmPassword =
+            document
+                .getElementById("confirmPassword")
+                .value;
+
+
+        // ==================================================
+        // VALIDATION
+        // ==================================================
+
+        if (
+            !fullName ||
+            !username ||
+            !email ||
+            !mobile ||
+            !address ||
+            !password ||
+            !confirmPassword
+        ) {
+
+            alert("Please fill in all fields.");
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // CHECK PASSWORD
+        // ==================================================
+
+        if (password !== confirmPassword) {
+
+            alert("Passwords do not match.");
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // PASSWORD LENGTH
+        // ==================================================
+
+        if (password.length < 6) {
+
+            alert(
+                "Password must contain at least 6 characters."
+            );
+
+            return;
+
+        }
+
+
+        // ==================================================
+        // DISABLE BUTTON
+        // ==================================================
+
+        registerButton.disabled = true;
+
+        registerButton.innerText =
+            "Creating Account...";
+
+
+        try {
+
+
+            // ==================================================
+            // SEND DATA TO SPRING BOOT
+            // ==================================================
+
+            const response =
+                await fetch(
+                    "/api/auth/register",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            fullName: fullName,
+
+                            username: username,
+
+                            email: email,
+
+                            mobile: mobile,
+
+                            address: address,
+
+                            password: password
+
+                        })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Registration response:",
+                data
+            );
+
+
+            // ==================================================
+            // REGISTRATION SUCCESS
+            // ==================================================
+
+            if (response.ok) {
+
+                alert(
+                    "Registration successful! " +
+                    "You can now login."
+                );
+
+
+                // Go back to login page
+
+                window.location.replace(
+                    "/login.html"
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================================
+            // REGISTRATION FAILED
+            // ==================================================
+
+            alert(
+                data.message ||
+                "Registration failed. Please try again."
+            );
+
+
+            registerButton.disabled = false;
+
+            registerButton.innerText =
+                "Create Account";
+
+
+        } catch (error) {
+
+            console.error(
+                "Registration Error:",
+                error
+            );
+
+
+            alert(
+                "Unable to connect to the server. " +
+                "Please make sure the Smart City server is running."
+            );
+
+
+            registerButton.disabled = false;
+
+            registerButton.innerText =
+                "Create Account";
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

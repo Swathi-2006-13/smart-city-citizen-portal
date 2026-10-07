@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart City - Login</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="background-slider">
+        <div class="bg-slide"></div>
+        <div class="bg-slide"></div>
+        <div class="bg-slide"></div>
+        <div class="bg-slide"></div>
+        <div class="bg-slide"></div>
+    </div>
+
+    <div class="background-overlay"></div>
+
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+
+            <div class="overlay">
+
+                <img src="images/logo.png" alt="Smart City Logo">
+
+                <h1>SMART CITY</h1>
+
+                <h3>Citizen Service Portal</h3>
+
+                <p>
+                    Building Smarter Cities,<br>
+                    Empowering Better Lives.
+                </p>
+
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Easy Online Services
+                    </li>
+
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Complaint Tracking
+                    </li>
+
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        24 × 7 Citizen Support
+                    </li>
+
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Secure Digital Platform
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+
+            <div class="login-box">
+
+                <h2>Welcome Back</h2>
+
+                <p>Please login to continue</p>
+
+
+                <form id="loginForm">
+
+                    <!-- Username -->
+                    <div class="input-box">
+
+                        <i class="fa fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Username"
+                            required>
+
+                    </div>
+
+
+                    <!-- Password -->
+                    <div class="input-box">
+
+                        <i class="fa fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Password"
+                            required>
+
+                        <i
+                            class="fa fa-eye"
+                            id="togglePassword">
+                        </i>
+
+                    </div>
+
+
+                    <!-- Options -->
+                    <div class="options">
+
+                        <label>
+                            <input type="checkbox">
+                            Remember Me
+                        </label>
+
+                        <a href="#">Forgot Password?</a>
+
+                    </div>
+
+
+                    <!-- Login Button -->
+                    <button
+                        type="submit"
+                        class="login-btn"
+                        id="loginButton">
+
+                        Login
+
+                    </button>
+
+                </form>
+
+
+                <!-- Register -->
+                <div class="register">
+
+                    Don't have an account?
+
+                    <a href="register.html">
+                        Register
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOGIN JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        // ==================================================
+        // PASSWORD SHOW / HIDE
+        // ==================================================
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+        const passwordInput =
+            document.getElementById("password");
+
+
+        togglePassword.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+                this.classList.remove("fa-eye");
+
+                this.classList.add("fa-eye-slash");
+
+            } else {
+
+                passwordInput.type = "password";
+
+                this.classList.remove("fa-eye-slash");
+
+                this.classList.add("fa-eye");
+
+            }
+
+        });
+
+
+        // ==================================================
+        // LOGIN FORM
+        // ==================================================
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+
+        loginForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim();
+
+
+                const passwordValue =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                // ==================================================
+                // VALIDATION
+                // ==================================================
+
+                if (username === "" || passwordValue === "") {
+
+                    alert(
+                        "Please enter username and password."
+                    );
+
+                    return;
+
+                }
+
+
+                // Disable button
+
+                loginButton.disabled = true;
+
+                loginButton.innerText = "Logging in...";
+
+
+                try {
+
+                    // ==================================================
+                    // CALL SPRING BOOT LOGIN API
+                    // ==================================================
+
+                    const response =
+                        await fetch(
+                            "/api/auth/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    username: username,
+                                    password: passwordValue
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Login response:",
+                        data
+                    );
+
+
+                    // ==================================================
+                    // SUCCESS
+                    // ==================================================
+
+                    if (response.ok) {
+
+                        // Save user information
+
+                        sessionStorage.setItem(
+                            "smartCityUser",
+                            JSON.stringify(data)
+                        );
+
+
+                        alert(
+                            "Login successful!"
+                        );
+
+
+                        // ==================================================
+                        // GO TO HOME PAGE
+                        // ==================================================
+
+                        window.location.replace(
+                            "/home.html"
+                        );
+
+
+                        return;
+                    }
+
+
+                    // ==================================================
+                    // LOGIN FAILED
+                    // ==================================================
+
+                    alert(
+                        data.message ||
+                        "Invalid username or password."
+                    );
+
+
+                    loginButton.disabled = false;
+
+                    loginButton.innerText = "Login";
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Login Error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Unable to connect to the server. " +
+                        "Please make sure the Smart City server is running."
+                    );
+
+
+                    loginButton.disabled = false;
+
+                    loginButton.innerText = "Login";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
