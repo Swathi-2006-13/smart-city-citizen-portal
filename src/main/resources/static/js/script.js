@@ -1,164 +1,90 @@
-// ======================================================
-// SMART CITY CITIZEN SERVICE PORTAL
-// Main JavaScript
-// ======================================================
 
+// ========================================
+// SMART CITY - COMPLAINT SUBMISSION
+// ========================================
 
-// ======================================================
-// PAGE LOAD
-// ======================================================
+document.addEventListener("DOMContentLoaded", function () {
 
-window.addEventListener("load", () => {
-    console.log("Smart City Portal Loaded Successfully");
-});
+    const requestForm = document.getElementById("requestForm");
 
+    if (!requestForm) {
+        return;
+    }
 
-// ======================================================
-// HERO BACKGROUND SLIDER
-// ======================================================
+    requestForm.addEventListener("submit", async function (event) {
 
-const hero = document.querySelector(".hero");
+        event.preventDefault();
 
-if (hero) {
-
-    const cityImages = [
-        "images/city1.jpg",
-        "images/city2.jpg",
-        "images/city3.jpg",
-        "images/city4.jpg",
-        "images/city5.jpg"
-    ];
-
-    let cityIndex = 0;
-
-    setInterval(() => {
-
-        cityIndex++;
-
-        if (cityIndex >= cityImages.length) {
-            cityIndex = 0;
+        if (!requestForm.checkValidity()) {
+            requestForm.reportValidity();
+            return;
         }
 
-        hero.style.backgroundImage =
-            "linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)), url('" +
-            cityImages[cityIndex] +
-            "')";
+        const submitButton =
+            document.getElementById("submitButton");
 
-    }, 5000);
-}
+        const formData = new FormData(requestForm);
 
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
 
-// ======================================================
-// REQUEST FORM
-// NOTE:
-// Login is NOT handled here.
-// Complaint backend integration will be connected separately.
-// ======================================================
+        try {
 
-const requestForm = document.querySelector(".request-form form");
+            const response = await fetch("/api/complaints", {
+                method: "POST",
+                body: formData,
+                credentials: "same-origin"
+            });
 
-if (requestForm) {
+            const responseText = await response.text();
 
-    requestForm.addEventListener("submit", (e) => {
+            let result = {};
 
-        e.preventDefault();
-
-        alert(
-            "Your Service Request has been submitted successfully!\n" +
-            "Your Complaint ID will be generated soon."
-        );
-
-    });
-}
-
-
-// ======================================================
-// CONTACT FORM
-// ======================================================
-
-const contactForm = document.querySelector(".message-box form");
-
-if (contactForm) {
-
-    contactForm.addEventListener("submit", (e) => {
-
-        e.preventDefault();
-
-        alert(
-            "Thank you for contacting Smart City. We will reply soon."
-        );
-
-    });
-}
-
-
-// ======================================================
-// REGISTER FORM
-// IMPORTANT:
-// Backend registration will be handled from register.html.
-// We do NOT intercept registerForm here.
-// This prevents the old fake registration alert from
-// interfering with the Spring Boot backend.
-// ======================================================
-
-
-// ======================================================
-// SCROLL ANIMATION
-// ======================================================
-
-const cards = document.querySelectorAll(
-    ".service-card, .info-card, .counter div"
-);
-
-window.addEventListener("scroll", () => {
-
-    cards.forEach(card => {
-
-        const position = card.getBoundingClientRect().top;
-        const screen = window.innerHeight;
-
-        if (position < screen - 100) {
-
-            card.style.opacity = "1";
-            card.style.transform = "translateY(0)";
-
-        }
-
-    });
-
-});
-
-
-// ======================================================
-// SERVICE SEARCH
-// ======================================================
-
-const search = document.querySelector(".search-service input");
-
-if (search) {
-
-    search.addEventListener("keyup", () => {
-
-        const value = search.value.toLowerCase();
-
-        const services = document.querySelectorAll(".service-card");
-
-        services.forEach(service => {
-
-            const text = service.innerText.toLowerCase();
-
-            if (text.includes(value)) {
-
-                service.style.display = "block";
-
-            } else {
-
-                service.style.display = "none";
-
+            try {
+                result = JSON.parse(responseText);
+            } catch (error) {
+                result = {
+                    message: responseText || "Unexpected server response"
+                };
             }
 
-        });
+            if (!response.ok) {
+
+                if (response.status === 401) {
+                    throw new Error("Please login before submitting a complaint.");
+                }
+
+                throw new Error(
+                    result.message || "Complaint submission failed."
+                );
+            }
+
+            if (!result.complaintId) {
+                throw new Error(
+                    "The server did not return a Complaint ID."
+                );
+            }
+
+            alert(
+                "Complaint submitted successfully!\n\n" +
+                "Your Complaint ID: " + result.complaintId
+            );
+
+            requestForm.reset();
+
+        } catch (error) {
+
+            console.error("Complaint submission error:", error);
+
+            alert("Error: " + error.message);
+
+        } finally {
+
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Request";
+
+        }
 
     });
 
-}
+ });

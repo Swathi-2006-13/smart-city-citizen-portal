@@ -1,10 +1,14 @@
+
 package com.smartcity.portal.controller;
 
 import com.smartcity.portal.entity.Complaint;
 import com.smartcity.portal.entity.User;
 import com.smartcity.portal.repository.ComplaintRepository;
 import com.smartcity.portal.repository.UserRepository;
+
 import jakarta.servlet.http.HttpSession;
+
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -35,94 +41,138 @@ public class ComplaintController {
         this.userRepository = userRepository;
     }
 
+    // ========================================
+    // CREATE COMPLAINT
+    // ========================================
+
     @PostMapping
     public ResponseEntity<?> createComplaint(
-            @RequestParam String phone,
-            @RequestParam String place,
-            @RequestParam String address,
-            @RequestParam String area,
-            @RequestParam String wardNumber,
-            @RequestParam String category,
-            @RequestParam String serviceRequired,
-            @RequestParam String priority,
-            @RequestParam String preferredContact,
-            @RequestParam(required = false) String preferredDate,
-            @RequestParam(required = false) String preferredTime,
-            @RequestParam String description,
-            @RequestParam(required = false) MultipartFile image,
+
+            @RequestParam("phone") String phone,
+            @RequestParam("place") String place,
+            @RequestParam("address") String address,
+            @RequestParam("area") String area,
+            @RequestParam("wardNumber") String wardNumber,
+            @RequestParam("category") String category,
+            @RequestParam("serviceRequired") String serviceRequired,
+            @RequestParam("priority") String priority,
+            @RequestParam("preferredContact") String preferredContact,
+
+            @RequestParam(value = "preferredDate", required = false)
+            String preferredDate,
+
+            @RequestParam(value = "preferredTime", required = false)
+            String preferredTime,
+
+            @RequestParam("description") String description,
+
+            @RequestParam(value = "image", required = false)
+            MultipartFile image,
+
             HttpSession session) {
 
-        Object usernameObject = session.getAttribute("username");
+        try {
 
-        if (usernameObject == null) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Please login first"));
-        }
+            // Check login session
+            Object usernameObject = session.getAttribute("username");
 
-        String username = usernameObject.toString();
+            if (usernameObject == null) {
+                return errorResponse(
+                        HttpStatus.UNAUTHORIZED,
+                        "Please login first."
+                );
+            }
 
-        User user = userRepository
-                .findByUsername(username)
-                .orElse(null);
+            String username = usernameObject.toString();
 
-        if (user == null) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "User not found"));
-        }
+            User user = userRepository
+                    .findByUsername(username)
+                    .orElse(null);
 
-        Complaint complaint = new Complaint();
+            if (user == null) {
+                return errorResponse(
+                        HttpStatus.UNAUTHORIZED,
+                        "Logged-in user was not found."
+                );
+            }
 
-        /*
-         * Generate complaint ID such as:
-         * SC10235
-         */
-        String complaintId = "SC" +
-                String.format("%05d", System.currentTimeMillis() % 100000);
+            // Validate required fields
+            if (phone.isBlank() || place.isBlank()
+                    || address.isBlank() || area.isBlank()
+                    || wardNumber.isBlank() || category.isBlank()
+                    || serviceRequired.isBlank()
+                    || priority.isBlank()
+                    || preferredContact.isBlank()
+                    || description.isBlank()) {
 
-        complaint.setComplaintId(complaintId);
-        complaint.setCitizen(user);
+                return errorResponse(
+                        HttpStatus.BAD_REQUEST,
+                        "Please fill in all required fields."
+                );
+            }
 
-        complaint.setPhone(phone);
-        complaint.setPlace(place);
-        complaint.setAddress(address);
-        complaint.setArea(area);
-        complaint.setWardNumber(wardNumber);
-        complaint.setCategory(category);
-        complaint.setServiceRequired(serviceRequired);
-        complaint.setPriority(priority);
-        complaint.setPreferredContact(preferredContact);
-        complaint.setDescription(description);
+            // Create complaint
+            Complaint complaint = new Complaint();
 
-        if (preferredDate != null && !preferredDate.isBlank()) {
-            complaint.setPreferredDate(
-                    LocalDate.parse(preferredDate)
-            );
-        }
+            // Generate unique complaint ID
+            String complaintId =
+                    "SC" + UUID.randomUUID()
+                            .toString()
+                            .replace("-", "")
+                            .substring(0, 10)
+                            .toUpperCase();
 
-        if (preferredTime != null && !preferredTime.isBlank()) {
-            complaint.setPreferredTime(
-                    LocalTime.parse(preferredTime)
-            );
-        }
+            complaint.setComplaintId(complaintId);
 
-        /*
-         * Save uploaded image
-         */
-        if (image != null && !image.isEmpty()) {
+            // Connect complaint to logged-in citizen
+            complaint.setCitizen(user);
 
-            try {
+            complaint.setPhone(phone.trim());
+            complaint.setPlace(place.trim());
+            complaint.setAddress(address.trim());
+            complaint.setArea(area.trim());
+            complaint.setWardNumber(wardNumber.trim());
+            complaint.setCategory(category);
+            complaint.setServiceRequired(serviceRequired);
+            complaint.setPriority(priority);
+            complaint.setPreferredContact(preferredContact);
+            complaint.setDescription(description.trim());
 
-                Path uploadDirectory =
-                        Paths.get("uploads");
+            // Date
+            if (preferredDate != null && !preferredDate.isBlank()) {
+                complaint.setPreferredDate(
+                        LocalDate.parse(preferredDate)
+                );
+            }
+
+            // Time
+            if (preferredTime != null && !preferredTime.isBlank()) {
+                complaint.setPreferredTime(
+                        LocalTime.parse(preferredTime)
+                );
+            }
+
+            // Upload image
+            if (image != null && !image.isEmpty()) {
+
+                String contentType = image.getContentType();
+
+                if (contentType == null ||
+                        !contentType.startsWith("image/")) {
+
+                    return errorResponse(
+                            HttpStatus.BAD_REQUEST,
+                            "Please upload a valid image."
+                    );
+                }
+
+                Path uploadDirectory = Paths.get("uploads");
 
                 Files.createDirectories(uploadDirectory);
 
-                String originalName =
-                        image.getOriginalFilename();
-
                 String extension = "";
+
+                String originalName = image.getOriginalFilename();
 
                 if (originalName != null &&
                         originalName.contains(".")) {
@@ -136,60 +186,103 @@ public class ComplaintController {
                         UUID.randomUUID() + extension;
 
                 Path filePath =
-                        uploadDirectory.resolve(fileName);
+                        uploadDirectory.resolve(fileName).normalize();
 
-                Files.write(
-                        filePath,
-                        image.getBytes()
-                );
+                if (!filePath.startsWith(uploadDirectory.normalize())) {
+                    return errorResponse(
+                            HttpStatus.BAD_REQUEST,
+                            "Invalid image filename."
+                    );
+                }
+
+                Files.copy(image.getInputStream(), filePath);
 
                 complaint.setImagePath(
                         "/uploads/" + fileName
                 );
-
-            } catch (IOException e) {
-
-                return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of(
-                                "message",
-                                "Unable to save uploaded image"
-                        ));
             }
+
+            complaint.setStatus("RECEIVED");
+
+            // Set creation time
+            complaint.setCreatedAt(LocalDateTime.now());
+
+            // Save complaint in MySQL
+            Complaint savedComplaint =
+                    complaintRepository.saveAndFlush(complaint);
+
+            // Return saved complaint ID
+            Map<String, Object> result = new HashMap<>();
+
+            result.put(
+                    "message",
+                    "Complaint submitted successfully."
+            );
+
+            result.put(
+                    "complaintId",
+                    savedComplaint.getComplaintId()
+            );
+
+            result.put(
+                    "status",
+                    savedComplaint.getStatus()
+            );
+
+            return ResponseEntity.ok(result);
+
+        } catch (DateTimeParseException e) {
+
+            return errorResponse(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid preferred date or time."
+            );
+
+        } catch (IOException e) {
+
+            return errorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unable to save uploaded image."
+            );
+
+        } catch (DataAccessException e) {
+
+            e.printStackTrace();
+
+            return errorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Database error. Complaint could not be saved."
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return errorResponse(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unable to submit complaint: " + e.getMessage()
+            );
         }
-
-        complaint.setStatus("RECEIVED");
-
-        Complaint saved =
-                complaintRepository.save(complaint);
-
-        return ResponseEntity.ok(
-                Map.of(
-                        "message",
-                        "Complaint submitted successfully",
-                        "complaintId",
-                        saved.getComplaintId()
-                )
-        );
     }
+
+    // ========================================
+    // TRACK COMPLAINT
+    // ========================================
 
     @GetMapping("/track/{complaintId}")
     public ResponseEntity<?> trackComplaint(
             @PathVariable String complaintId) {
 
-        Complaint complaint =
-                complaintRepository
-                        .findByComplaintId(complaintId)
-                        .orElse(null);
+        Complaint complaint = complaintRepository
+                .findByComplaintId(complaintId)
+                .orElse(null);
 
         if (complaint == null) {
 
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(Map.of(
-                            "message",
-                            "Complaint not found"
-                    ));
+            return errorResponse(
+                    HttpStatus.NOT_FOUND,
+                    "Complaint not found. Please check your Complaint ID."
+            );
         }
 
         return ResponseEntity.ok(
@@ -197,113 +290,89 @@ public class ComplaintController {
         );
     }
 
+    // ========================================
+    // VIEW MY COMPLAINTS
+    // ========================================
+
     @GetMapping("/mine")
-    public ResponseEntity<?> myComplaints(
-            HttpSession session) {
+    public ResponseEntity<?> myComplaints(HttpSession session) {
 
         Object usernameObject =
                 session.getAttribute("username");
 
         if (usernameObject == null) {
 
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of(
-                            "message",
-                            "Please login first"
-                    ));
+            return errorResponse(
+                    HttpStatus.UNAUTHORIZED,
+                    "Please login first."
+            );
         }
 
-        String username =
-                usernameObject.toString();
+        String username = usernameObject.toString();
 
         return ResponseEntity.ok(
                 complaintRepository
-                        .findByCitizenUsernameOrderByCreatedAtDesc(
-                                username
-                        )
+                        .findByCitizenUsernameOrderByCreatedAtDesc(username)
                         .stream()
                         .map(this::convertToMap)
                         .toList()
         );
     }
 
+    // ========================================
+    // CONVERT COMPLAINT TO JSON
+    // ========================================
+
     private Map<String, Object> convertToMap(
             Complaint complaint) {
 
-        Map<String, Object> data =
-                new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
 
-        data.put(
-                "complaintId",
-                complaint.getComplaintId()
-        );
+        data.put("id", complaint.getId());
+        data.put("complaintId", complaint.getComplaintId());
 
         data.put(
                 "citizenName",
-                complaint.getCitizen().getFullName()
+                complaint.getCitizen() != null
+                        ? complaint.getCitizen().getFullName()
+                        : null
         );
 
-        data.put(
-                "category",
-                complaint.getCategory()
-        );
-
-        data.put(
-                "location",
-                complaint.getPlace()
-        );
-
-        data.put(
-                "address",
-                complaint.getAddress()
-        );
-
-        data.put(
-                "area",
-                complaint.getArea()
-        );
-
-        data.put(
-                "wardNumber",
-                complaint.getWardNumber()
-        );
-
-        data.put(
-                "dateSubmitted",
-                complaint.getCreatedAt()
-        );
-
-        data.put(
-                "priority",
-                complaint.getPriority()
-        );
-
-        data.put(
-                "assignedOfficer",
-                complaint.getAssignedOfficer()
-        );
-
-        data.put(
-                "expectedCompletion",
-                complaint.getExpectedCompletion()
-        );
-
-        data.put(
-                "status",
-                complaint.getStatus()
-        );
-
-        data.put(
-                "description",
-                complaint.getDescription()
-        );
-
-        data.put(
-                "imagePath",
-                complaint.getImagePath()
-        );
+        data.put("category", complaint.getCategory());
+        data.put("location", complaint.getPlace());
+        data.put("address", complaint.getAddress());
+        data.put("area", complaint.getArea());
+        data.put("wardNumber", complaint.getWardNumber());
+        data.put("phone", complaint.getPhone());
+        data.put("serviceRequired", complaint.getServiceRequired());
+        data.put("dateSubmitted", complaint.getCreatedAt());
+        data.put("priority", complaint.getPriority());
+        data.put("preferredContact", complaint.getPreferredContact());
+        data.put("preferredDate", complaint.getPreferredDate());
+        data.put("preferredTime", complaint.getPreferredTime());
+        data.put("assignedOfficer", complaint.getAssignedOfficer());
+        data.put("expectedCompletion", complaint.getExpectedCompletion());
+        data.put("status", complaint.getStatus());
+        data.put("description", complaint.getDescription());
+        data.put("imagePath", complaint.getImagePath());
 
         return data;
+    }
+
+    // ========================================
+    // ERROR RESPONSE
+    // ========================================
+
+    private ResponseEntity<Map<String, String>> errorResponse(
+            HttpStatus status,
+            String message) {
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("message", message);
+
+        return ResponseEntity
+                .status(status)
+                .body(error);
     }
 }
