@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,397 +16,244 @@
 
 <body>
 
-<!-- HEADER -->
+    <!-- HEADER -->
 
-<header>
+    <header>
 
-    <div class="logo">
-        <img src="images/logo.png" alt="Logo">
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo">
 
-        <div>
-            <h1>SMART CITY</h1>
-            <p>Citizen Service Portal</p>
-        </div>
-    </div>
-
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="request.html">Request Service</a></li>
-            <li><a href="track.html" class="active">Track Complaint</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
-
-</header>
-
-<!-- PAGE TITLE -->
-
-<section class="page-banner">
-    <h1>Track Your Complaint</h1>
-    <p>Enter your Complaint ID to view the latest complaint status.</p>
-</section>
-
-<!-- TRACK FORM -->
-
-<section class="track-section">
-
-    <div class="track-box">
-
-        <h2>Complaint Tracking</h2>
-
-        <form id="trackForm">
-
-            <input
-                type="text"
-                id="complaintId"
-                placeholder="Enter Complaint ID (Example: SCXXXXXXXXXX)"
-                required
-            >
-
-            <button type="submit" id="trackButton">
-                Track Status
-            </button>
-
-        </form>
-
-        <p id="trackMessage" role="status"></p>
-
-    </div>
-
-</section>
-
-<!-- COMPLAINT DETAILS -->
-
-<section class="complaint-details" id="complaintDetails" hidden>
-
-    <h2>Complaint Details</h2>
-
-    <div class="details-card">
-
-        <div class="detail-row">
-            <strong>Complaint ID :</strong>
-            <span id="resultComplaintId">-</span>
+            <div>
+                <h1>SMART CITY</h1>
+                <p>Citizen Service Portal</p>
+            </div>
         </div>
 
-        <div class="detail-row">
-            <strong>Citizen Name :</strong>
-            <span id="resultCitizenName">-</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="request.html">Request Service</a></li>
+                <li><a href="track.html" class="active">Track Complaint</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+    </header>
+
+
+    <!-- PAGE TITLE -->
+
+    <section class="page-banner">
+
+        <h1>Track Your Complaint</h1>
+
+        <p>
+            Enter your Complaint ID to view the latest complaint status.
+        </p>
+
+    </section>
+
+
+    <!-- TRACK FORM -->
+
+    <section class="track-section">
+
+        <div class="track-box">
+
+            <h2>Complaint Tracking</h2>
+
+            <form id="trackForm">
+
+                <input
+                    type="text"
+                    id="complaintId"
+                    name="complaintId"
+                    placeholder="Enter Complaint ID (Example: SCXXXXXXXXXX)"
+                    required
+                    autocomplete="off"
+                >
+
+                <button type="submit" id="trackButton">
+                    Track Status
+                </button>
+
+            </form>
+
+            <p id="trackMessage" role="status" aria-live="polite"></p>
+
         </div>
 
-        <div class="detail-row">
-            <strong>Phone :</strong>
-            <span id="resultPhone">-</span>
+    </section>
+
+
+    <!-- COMPLAINT DETAILS -->
+
+    <section class="complaint-details"
+             id="complaintDetails"
+             hidden>
+
+        <h2>Complaint Details</h2>
+
+        <div class="details-card">
+
+            <div class="detail-row">
+                <strong>Complaint ID :</strong>
+                <span id="resultComplaintId">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Citizen Name :</strong>
+                <span id="resultCitizenName">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Phone :</strong>
+                <span id="resultPhone">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Category :</strong>
+                <span id="resultCategory">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Service Required :</strong>
+                <span id="resultService">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Location :</strong>
+                <span id="resultLocation">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Address :</strong>
+                <span id="resultAddress">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Area :</strong>
+                <span id="resultArea">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Ward Number :</strong>
+                <span id="resultWard">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Date Submitted :</strong>
+                <span id="resultDate">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Priority :</strong>
+                <span id="resultPriority">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Status :</strong>
+                <span id="resultStatus">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Assigned Officer :</strong>
+                <span id="resultOfficer">Not assigned yet</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Expected Completion :</strong>
+                <span id="resultCompletion">Not scheduled</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Description :</strong>
+                <span id="resultDescription">-</span>
+            </div>
+
+            <div class="detail-row">
+                <strong>Complaint Image :</strong>
+                <span id="resultImage">No image uploaded</span>
+            </div>
+
         </div>
 
-        <div class="detail-row">
-            <strong>Category :</strong>
-            <span id="resultCategory">-</span>
+    </section>
+
+
+    <!-- COMPLAINT PROGRESS -->
+
+    <section class="progress-section"
+             id="progressSection"
+             hidden>
+
+        <h2>Complaint Progress</h2>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill" id="progressFill"></div>
+
         </div>
 
-        <div class="detail-row">
-            <strong>Service Required :</strong>
-            <span id="resultService">-</span>
+        <div class="progress-steps">
+
+            <div class="step" id="stepReceived">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <p>Complaint Received</p>
+
+            </div>
+
+
+            <div class="step" id="stepProgress">
+
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                <p>In Progress</p>
+
+            </div>
+
+
+            <div class="step" id="stepCompleted">
+
+                <i class="fa-solid fa-flag-checkered"></i>
+
+                <p>Completed</p>
+
+            </div>
+
         </div>
 
-        <div class="detail-row">
-            <strong>Location :</strong>
-            <span id="resultLocation">-</span>
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-social">
+
+            <i class="fab fa-facebook"></i>
+
+            <i class="fab fa-twitter"></i>
+
+            <i class="fab fa-instagram"></i>
+
+            <i class="fab fa-youtube"></i>
+
         </div>
 
-        <div class="detail-row">
-            <strong>Address :</strong>
-            <span id="resultAddress">-</span>
-        </div>
+        <p>© 2026 Smart City Citizen Service Portal</p>
 
-        <div class="detail-row">
-            <strong>Area :</strong>
-            <span id="resultArea">-</span>
-        </div>
+    </footer>
 
-        <div class="detail-row">
-            <strong>Ward Number :</strong>
-            <span id="resultWard">-</span>
-        </div>
 
-        <div class="detail-row">
-            <strong>Date Submitted :</strong>
-            <span id="resultDate">-</span>
-        </div>
+    <!-- MAIN JAVASCRIPT -->
 
-        <div class="detail-row">
-            <strong>Priority :</strong>
-            <span id="resultPriority">-</span>
-        </div>
+    <script src="js/script.js?v=5"></script>
 
-        <div class="detail-row">
-            <strong>Status :</strong>
-            <span id="resultStatus">-</span>
-        </div>
+</body>
 
-        <div class="detail-row">
-            <strong>Assigned Officer :</strong>
-            <span id="resultOfficer">Not assigned yet</span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Expected Completion :</strong>
-            <span id="resultCompletion">Not scheduled</span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Description :</strong>
-            <span id="resultDescription">-</span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Complaint Image :</strong>
-            <span id="resultImage">No image uploaded</span>
-        </div>
-
-    </div>
-
-</section>
-
-<!-- PROGRESS -->
-
-<section class="progress-section" id="progressSection" hidden>
-
-    <h2>Complaint Progress</h2>
-
-    <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-    </div>
-
-    <div class="progress-steps">
-
-        <div class="step" id="stepReceived">
-            <i class="fa-solid fa-circle-check"></i>
-            <p>Complaint Received</p>
-        </div>
-
-        <div class="step" id="stepProgress">
-            <i class="fa-solid fa-screwdriver-wrench"></i>
-            <p>In Progress</p>
-        </div>
-
-        <div class="step" id="stepCompleted">
-            <i class="fa-solid fa-flag-checkered"></i>
-            <p>Completed</p>
-        </div>
-
-    </div>
-
-</section>
-
-<!-- FOOTER -->
-
-<footer>
-
-    <div class="footer-social">
-        <i class="fab fa-facebook"></i>
-        <i class="fab fa-twitter"></i>
-        <i class="fab fa-instagram"></i>
-        <i class="fab fa-youtube"></i>
-    </div>
-
-    <p>© 2026 Smart City Citizen Service Portal</p>
-
-</footer>
-
-<script src="js/script.js?v=3"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const trackForm = document.getElementById("trackForm");
-    const complaintInput = document.getElementById("complaintId");
-    const trackButton = document.getElementById("trackButton");
-    const trackMessage = document.getElementById("trackMessage");
-
-    const detailsSection =
-        document.getElementById("complaintDetails");
-
-    const progressSection =
-        document.getElementById("progressSection");
-
-    function setText(id, value) {
-        document.getElementById(id).textContent =
-            value === null || value === undefined || value === ""
-                ? "-"
-                : value;
-    }
-
-    function formatDate(value) {
-
-        if (!value) {
-            return "-";
-        }
-
-        const date = new Date(value);
-
-        if (Number.isNaN(date.getTime())) {
-            return value;
-        }
-
-        return date.toLocaleString("en-IN");
-    }
-
-    function updateProgress(status) {
-
-        const normalizedStatus =
-            String(status || "").toUpperCase().replace(/[\s-]+/g, "_");
-
-        const received = document.getElementById("stepReceived");
-        const progress = document.getElementById("stepProgress");
-        const completed = document.getElementById("stepCompleted");
-        const fill = document.getElementById("progressFill");
-
-        received.classList.remove("active");
-        progress.classList.remove("active");
-        completed.classList.remove("active");
-
-        let percentage = 10;
-
-        received.classList.add("active");
-
-        if (
-            normalizedStatus === "IN_PROGRESS" ||
-            normalizedStatus === "PROCESSING"
-        ) {
-            progress.classList.add("active");
-            percentage = 55;
-        } else if (
-            normalizedStatus === "COMPLETED" ||
-            normalizedStatus === "RESOLVED"
-        ) {
-            progress.classList.add("active");
-            completed.classList.add("active");
-            percentage = 100;
-        } else if (
-            normalizedStatus === "REJECTED" ||
-            normalizedStatus === "CANCELLED"
-        ) {
-            percentage = 10;
-        }
-
-        fill.style.width = percentage + "%";
-    }
-
-    trackForm.addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-        const complaintId = complaintInput.value.trim();
-
-        if (!complaintId) {
-            trackMessage.textContent = "Please enter a Complaint ID.";
-            return;
-        }
-
-        trackButton.disabled = true;
-        trackButton.textContent = "Searching...";
-
-        trackMessage.textContent = "";
-        detailsSection.hidden = true;
-        progressSection.hidden = true;
-
-        try {
-
-            const response = await fetch(
-                "/api/complaints/track/" +
-                encodeURIComponent(complaintId),
-                {
-                    method: "GET",
-                    credentials: "same-origin",
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                }
-            );
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    result.message || "Complaint not found."
-                );
-            }
-
-            setText("resultComplaintId", result.complaintId);
-            setText("resultCitizenName", result.citizenName);
-            setText("resultPhone", result.phone);
-            setText("resultCategory", result.category);
-            setText("resultService", result.serviceRequired);
-            setText("resultLocation", result.location);
-            setText("resultAddress", result.address);
-            setText("resultArea", result.area);
-            setText("resultWard", result.wardNumber);
-            setText("resultDate", formatDate(result.dateSubmitted));
-            setText("resultPriority", result.priority);
-            setText("resultStatus", result.status);
-            setText("resultOfficer", result.assignedOfficer);
-            setText(
-                "resultCompletion",
-                result.expectedCompletion
-                    ? formatDate(result.expectedCompletion)
-                    : "Not scheduled"
-            );
-            setText("resultDescription", result.description);
-
-            const imageContainer =
-                document.getElementById("resultImage");
-
-            imageContainer.textContent = "";
-
-            if (result.imagePath) {
-
-                const image = document.createElement("img");
-
-                image.src = result.imagePath;
-                image.alt = "Complaint image";
-                image.style.maxWidth = "220px";
-                image.style.maxHeight = "180px";
-
-                image.onerror = function () {
-                    imageContainer.textContent =
-                        "Uploaded image could not be loaded.";
-                };
-
-                imageContainer.appendChild(image);
-
-            } else {
-
-                imageContainer.textContent = "No image uploaded";
-
-            }
-
-            updateProgress(result.status);
-
-            detailsSection.hidden = false;
-            progressSection.hidden = false;
-
-            trackMessage.textContent =
-                "Complaint details loaded successfully.";
-
-        } catch (error) {
-
-            console.error("Tracking error:", error);
-
-            trackMessage.textContent = error.message;
-
-        } finally {
-
-            trackButton.disabled = false;
-            trackButton.textContent = "Track Status";
-
-        }
-
-    });
-
-});
-</script>
-
- </body>
 </html>
